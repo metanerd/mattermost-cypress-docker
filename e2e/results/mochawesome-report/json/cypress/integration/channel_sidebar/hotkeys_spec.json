@@ -1,0 +1,151 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 3,
+    "passes": 2,
+    "pending": 0,
+    "failures": 1,
+    "start": "2020-05-04T05:40:39.878Z",
+    "end": "2020-05-04T05:41:16.049Z",
+    "duration": 36171,
+    "testsRegistered": 3,
+    "passPercent": 66.66666666666666,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "035b2197-7f37-48ed-a0da-a46a8e931b48",
+      "title": "",
+      "fullFile": "cypress/integration/channel_sidebar/hotkeys_spec.js",
+      "file": "cypress/integration/channel_sidebar/hotkeys_spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "3c61983e-9cc2-40bb-b06f-9a9ed75c15db",
+          "title": "Channel switching",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "should switch channels when pressing the alt + arrow hotkeys",
+              "fullTitle": "Channel switching should switch channels when pressing the alt + arrow hotkeys",
+              "timedOut": null,
+              "duration": 8864,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// # Start with a new team\nvar teamName = \"team-\" + utils_1.getRandomInt(999999);\ncy.createNewTeam(teamName, teamName);\n// * Verify that we've switched to the new team\ncy.get('#headerTeamName').should('contain', teamName);\n// # Press alt + up\ncy.get('body').type('{alt}', { release: false }).type('{uparrow}').type('{alt}', { release: true });\n// * Verify that the channel changed to the Off-Topic channel\ncy.url().should('include', \"/\" + teamName + \"/channels/off-topic\");\ncy.get('#channelHeaderTitle').should('contain', 'Off-Topic');\n// # Press alt + down\ncy.get('body').type('{alt}', { release: false }).type('{downarrow}').type('{alt}', { release: true });\n// * Verify that the channel changed to the Town Square\ncy.url().should('include', \"/\" + teamName + \"/channels/town-square\");\ncy.get('#channelHeaderTitle').should('contain', 'Town Square');",
+              "err": {},
+              "uuid": "2134514b-8661-41a8-9f19-4d121dfe3109",
+              "parentUUID": "3c61983e-9cc2-40bb-b06f-9a9ed75c15db",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should switch to unread channels when pressing the alt + shift + arrow hotkeys",
+              "fullTitle": "Channel switching should switch to unread channels when pressing the alt + shift + arrow hotkeys",
+              "timedOut": null,
+              "duration": 5020,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// # Start with a new team\nvar teamName = \"team-\" + utils_1.getRandomInt(999999);\ncy.createNewTeam(teamName, teamName);\n// * Verify that we've switched to the new team\ncy.get('#headerTeamName').should('contain', teamName);\ncy.getCurrentChannelId().as('townSquareId');\n// # Create a new channel\n// cy.createAndVisitNewChannel().as('testChannel');\ncy.getCurrentTeamId().then(function (teamId) {\n    cy.apiCreateChannel(teamId, 'test-channel', 'Test Channel').then(function (response) {\n        expect(response.status).to.equal(201);\n        cy.wrap(response.body).as('testChannel');\n    });\n});\n// # Have another user post a message in the new channel\ncy.get('@testChannel').then(function (testChannel) { return cy.postMessageAs({ sender: sysadmin, message: 'Test', channelId: testChannel.id }); });\n// # Press alt + shift + up\ncy.get('body').type('{alt}{shift}', { release: false }).type('{uparrow}').type('{alt}{shift}', { release: true });\n// * Verify that the channel changed to Test Channel and skipped Off Topic\ncy.url().should('include', \"/\" + teamName + \"/channels/test-channel\");\ncy.get('#channelHeaderTitle').should('contain', 'Test Channel');\n// # Have another user post a message in the town square\ncy.get('@townSquareId').then(function (townSquareId) { return cy.postMessageAs({ sender: sysadmin, message: 'Test', channelId: townSquareId }); });\n// # Press alt + shift + down\ncy.get('body').type('{alt}{shift}', { release: false }).type('{downarrow}').type('{alt}{shift}', { release: true });\n// * Verify that the channel changed back to Town Square and skipped Off Topic\ncy.url().should('include', \"/\" + teamName + \"/channels/town-square\");\ncy.get('#channelHeaderTitle').should('contain', 'Town Square');",
+              "err": {},
+              "uuid": "81ab14e8-152b-46a9-b6a8-4455db3ac322",
+              "parentUUID": "3c61983e-9cc2-40bb-b06f-9a9ed75c15db",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should open and close channel switcher on ctrl/cmd + k",
+              "fullTitle": "Channel switching should open and close channel switcher on ctrl/cmd + k",
+              "timedOut": null,
+              "duration": 21397,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": "{\n  \"title\": \"Failing Screenshot: >> screenshots/e2e/cypress/integration/channel_sidebar/hotkeys_spec.js/Channel switching -- should open and close channel switcher on ctrlcmd + k (failed).png\",\n  \"value\": \"screenshots/e2e/cypress/integration/channel_sidebar/hotkeys_spec.js/Channel switching -- should open and close channel switcher on ctrlcmd + k (failed).png\"\n}",
+              "code": "// * Verify that the channel has loaded\ncy.get('#channelHeaderTitle').should('be.visible');\n// # Press ctrl/cmd + k\ncy.get('body').type(cmdOrCtrl, { release: false }).type('k').type(cmdOrCtrl, { release: true });\n// * Verify that the modal has been opened\ncy.get('.channel-switch__modal').should('be.visible');\n// # Press ctrl/cmd + k\ncy.get('body').type(cmdOrCtrl, { release: false }).type('k').type(cmdOrCtrl, { release: true });\n// * Verify that the modal has been closed\ncy.get('.channel-switch__modal').should('not.be.visible');",
+              "err": {
+                "message": "AssertionError: Timed out retrying: Expected to find element: `.channel-switch__modal`, but never found it.",
+                "estack": "AssertionError: Timed out retrying: Expected to find element: `.channel-switch__modal`, but never found it.\n    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137438:32)\n    at Object.ensureElExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137456:12)\n    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:127861:23)\n    at onFailFn (http://localhost:8065/__cypress/runner/cypress_runner.js:127899:9)\n    at tryCatcher (http://localhost:8065/__cypress/runner/cypress_runner.js:9059:23)\n    at Promise._settlePromiseFromHandler (http://localhost:8065/__cypress/runner/cypress_runner.js:6994:31)\n    at Promise._settlePromise (http://localhost:8065/__cypress/runner/cypress_runner.js:7051:18)\n    at Promise._settlePromise0 (http://localhost:8065/__cypress/runner/cypress_runner.js:7096:10)\n    at Promise._settlePromises (http://localhost:8065/__cypress/runner/cypress_runner.js:7172:18)\n    at _drainQueueStep (http://localhost:8065/__cypress/runner/cypress_runner.js:3766:12)\n    at _drainQueue (http://localhost:8065/__cypress/runner/cypress_runner.js:3759:9)\n    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3775:5)\n    at Async.drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3645:14)",
+                "diff": null
+              },
+              "uuid": "8ec51a75-8d6a-4f9c-baa2-ddd91e25ef57",
+              "parentUUID": "3c61983e-9cc2-40bb-b06f-9a9ed75c15db",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "2134514b-8661-41a8-9f19-4d121dfe3109",
+            "81ab14e8-152b-46a9-b6a8-4455db3ac322"
+          ],
+          "failures": [
+            "8ec51a75-8d6a-4f9c-baa2-ddd91e25ef57"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 35281,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.1.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": true,
+        "reportFilename": "json/cypress/integration/channel_sidebar/hotkeys_spec.js",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "6.1.0"
+    },
+    "marge": {
+      "options": {
+        "id": "default",
+        "reportDir": "results/mochawesome-report",
+        "reportFilename": "json/cypress/integration/channel_sidebar/hotkeys_spec.js",
+        "quiet": true,
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "5.1.0"
+    }
+  }
+}

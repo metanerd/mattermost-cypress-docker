@@ -1,0 +1,170 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 4,
+    "passes": 3,
+    "pending": 0,
+    "failures": 1,
+    "start": "2020-05-04T05:39:40.743Z",
+    "end": "2020-05-04T05:40:16.581Z",
+    "duration": 35838,
+    "testsRegistered": 4,
+    "passPercent": 75,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "67ac661f-972b-4832-b923-551d046e5f14",
+      "title": "",
+      "fullFile": "cypress/integration/channel_sidebar/channel_sidebar_spec.js",
+      "file": "cypress/integration/channel_sidebar/channel_sidebar_spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "27de4b3f-27b6-4abf-b088-e165a81f5297",
+          "title": "Channel sidebar",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "should switch channels when clicking on a channel in the sidebar",
+              "fullTitle": "Channel sidebar should switch channels when clicking on a channel in the sidebar",
+              "timedOut": null,
+              "duration": 5748,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// # Start with a new team\nvar teamName = \"team-\" + utils_1.getRandomInt(999999);\ncy.createNewTeam(teamName, teamName);\n// * Verify that we've switched to the new team\ncy.get('#headerTeamName').should('be.visible').should('be.visible').should('contain', teamName);\n// # Click on Off Topic\ncy.get('.SidebarChannel:contains(Off-Topic)').should('be.visible').click();\n// * Verify that the channel changed\ncy.url().should('include', \"/\" + teamName + \"/channels/off-topic\");\ncy.get('#channelHeaderTitle').should('be.visible').should('contain', 'Off-Topic');\n// # Click on Town Square\ncy.get('.SidebarChannel:contains(Town Square)').should('be.visible').click();\n// * Verify that the channel changed\ncy.url().should('include', \"/\" + teamName + \"/channels/town-square\");\ncy.get('#channelHeaderTitle').should('be.visible').should('contain', 'Town Square');",
+              "err": {},
+              "uuid": "ba8e6a89-5bb4-413f-9f9f-fde44ba5db25",
+              "parentUUID": "27de4b3f-27b6-4abf-b088-e165a81f5297",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should mark channel as read and unread in sidebar",
+              "fullTitle": "Channel sidebar should mark channel as read and unread in sidebar",
+              "timedOut": null,
+              "duration": 2460,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// # Start with a new team\nvar teamName = \"team-\" + utils_1.getRandomInt(999999);\ncy.createNewTeam(teamName, teamName);\n// * Verify that we've switched to the new team\ncy.get('#headerTeamName').should('be.visible').should('contain', teamName);\n// * Verify that both Off Topic and Town Square are read\ncy.get('.SidebarChannel:not(.unread):contains(Off-Topic)').should('be.visible');\ncy.get('.SidebarChannel:not(.unread):contains(Town Square)').should('be.visible');\n// # Have another user post in the Off Topic channel\ncy.apiGetChannelByName(teamName, 'off-topic').then(function (response) {\n    expect(response.status).to.equal(200);\n    var channel = response.body;\n    cy.postMessageAs({ sender: sysadmin, message: 'Test', channelId: channel.id });\n});\n// * Verify that Off Topic is unread and Town Square is read\ncy.get('.SidebarChannel.unread:contains(Off-Topic)').should('be.visible');\ncy.get('.SidebarChannel:not(.unread):contains(Town Square)').should('be.visible');",
+              "err": {},
+              "uuid": "a36972d0-4224-4af7-848c-3bd9150de4a4",
+              "parentUUID": "27de4b3f-27b6-4abf-b088-e165a81f5297",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should remove channel from sidebar after leaving it",
+              "fullTitle": "Channel sidebar should remove channel from sidebar after leaving it",
+              "timedOut": null,
+              "duration": 22823,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": "{\n  \"title\": \"Failing Screenshot: >> screenshots/e2e/cypress/integration/channel_sidebar/channel_sidebar_spec.js/Channel sidebar -- should remove channel from sidebar after leaving it (failed).png\",\n  \"value\": \"screenshots/e2e/cypress/integration/channel_sidebar/channel_sidebar_spec.js/Channel sidebar -- should remove channel from sidebar after leaving it (failed).png\"\n}",
+              "code": "// # Start with a new team\nvar teamName = \"team-\" + utils_1.getRandomInt(999999);\ncy.createNewTeam(teamName, teamName);\n// * Verify that we've switched to the new team\ncy.get('#headerTeamName').should('be.visible').should('contain', teamName);\n// # Switch to Off Topic\ncy.visit(\"/\" + teamName + \"/channels/off-topic\");\n// # Wait for the channel to change\ncy.get('#channelHeaderTitle').should('be.visible').should('contain', 'Off-Topic');\n// # Click on the channel menu and select Leave Channel\ncy.get('#channelHeaderTitle').click();\ncy.get('#channelLeaveChannel').should('be.visible').click();\n// * Verify that we've switched to Town Square\ncy.url().should('include', \"/\" + teamName + \"/channels/town-square\");\ncy.get('#channelHeaderTitle').should('be.visible').should('contain', 'Town Square');\n// * Verify that Off Topic has disappeared from the sidebar\ncy.get('.SidebarChannel:contains(Off-Topic)').should('not.exist');",
+              "err": {
+                "message": "AssertionError: Timed out retrying: Expected to find element: `#channelHeaderTitle`, but never found it.",
+                "estack": "AssertionError: Timed out retrying: Expected to find element: `#channelHeaderTitle`, but never found it.\n    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137438:32)\n    at Object.ensureElExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137456:12)\n    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:127861:23)\n    at onFailFn (http://localhost:8065/__cypress/runner/cypress_runner.js:127899:9)\n    at tryCatcher (http://localhost:8065/__cypress/runner/cypress_runner.js:9059:23)\n    at Promise._settlePromiseFromHandler (http://localhost:8065/__cypress/runner/cypress_runner.js:6994:31)\n    at Promise._settlePromise (http://localhost:8065/__cypress/runner/cypress_runner.js:7051:18)\n    at Promise._settlePromise0 (http://localhost:8065/__cypress/runner/cypress_runner.js:7096:10)\n    at Promise._settlePromises (http://localhost:8065/__cypress/runner/cypress_runner.js:7172:18)\n    at _drainQueueStep (http://localhost:8065/__cypress/runner/cypress_runner.js:3766:12)\n    at _drainQueue (http://localhost:8065/__cypress/runner/cypress_runner.js:3759:9)\n    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3775:5)\n    at Async.drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3645:14)",
+                "diff": null
+              },
+              "uuid": "ebe56909-b51c-4d1c-ab47-f6621fcedd30",
+              "parentUUID": "27de4b3f-27b6-4abf-b088-e165a81f5297",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "MM-23239 should remove channel from sidebar after deleting it",
+              "fullTitle": "Channel sidebar MM-23239 should remove channel from sidebar after deleting it",
+              "timedOut": null,
+              "duration": 4086,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// # Start with a new team\nvar teamName = \"team-\" + utils_1.getRandomInt(999999);\ncy.createNewTeam(teamName, teamName);\n// * Verify that we've switched to the new team\ncy.get('#headerTeamName').should('be.visible').should('contain', teamName);\n// # Switch to Off Topic\ncy.visit(\"/\" + teamName + \"/channels/off-topic\");\n// # Wait for the channel to change\ncy.get('#channelHeaderTitle').should('be.visible').should('contain', 'Off-Topic');\n// # Click on the channel menu and select Leave Channel\ncy.get('#channelHeaderTitle').click();\ncy.get('#channelArchiveChannel').should('be.visible').click();\ncy.get('#deleteChannelModalDeleteButton').should('be.visible').click();\n// * Verify that we've switched to Town Square\ncy.url().should('include', \"/\" + teamName + \"/channels/town-square\");\ncy.get('#channelHeaderTitle').should('be.visible').should('contain', 'Town Square');\n// * Verify that Off Topic has disappeared from the sidebar\ncy.get('.SidebarChannel:contains(Off-Topic)').should('not.exist');",
+              "err": {},
+              "uuid": "70900349-554c-40d5-aae8-6b969efb30c1",
+              "parentUUID": "27de4b3f-27b6-4abf-b088-e165a81f5297",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "ba8e6a89-5bb4-413f-9f9f-fde44ba5db25",
+            "a36972d0-4224-4af7-848c-3bd9150de4a4",
+            "70900349-554c-40d5-aae8-6b969efb30c1"
+          ],
+          "failures": [
+            "ebe56909-b51c-4d1c-ab47-f6621fcedd30"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 35117,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.1.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": true,
+        "reportFilename": "json/cypress/integration/channel_sidebar/channel_sidebar_spec.js",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "6.1.0"
+    },
+    "marge": {
+      "options": {
+        "id": "default",
+        "reportDir": "results/mochawesome-report",
+        "reportFilename": "json/cypress/integration/channel_sidebar/channel_sidebar_spec.js",
+        "quiet": true,
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "5.1.0"
+    }
+  }
+}

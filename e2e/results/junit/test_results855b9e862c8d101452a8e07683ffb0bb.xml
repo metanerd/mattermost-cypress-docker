@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="12.294" tests="4" failures="1">
+  <testsuite name="Root Suite" timestamp="2020-05-04T05:39:40" tests="0" file="cypress/integration/channel_sidebar/channel_sidebar_spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Channel sidebar" timestamp="2020-05-04T05:39:41" tests="4" failures="1" time="12.294">
+    <testcase name="Channel sidebar should switch channels when clicking on a channel in the sidebar" time="5.748" classname="should switch channels when clicking on a channel in the sidebar">
+    </testcase>
+    <testcase name="Channel sidebar should mark channel as read and unread in sidebar" time="2.46" classname="should mark channel as read and unread in sidebar">
+    </testcase>
+    <testcase name="Channel sidebar should remove channel from sidebar after leaving it" time="0" classname="should remove channel from sidebar after leaving it">
+      <failure message="Timed out retrying: Expected to find element: `#channelHeaderTitle`, but never found it." type="AssertionError"><![CDATA[AssertionError: Timed out retrying: Expected to find element: `#channelHeaderTitle`, but never found it.
+    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137438:32)
+    at Object.ensureElExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137456:12)
+    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:127861:23)
+    at onFailFn (http://localhost:8065/__cypress/runner/cypress_runner.js:127899:9)
+    at tryCatcher (http://localhost:8065/__cypress/runner/cypress_runner.js:9059:23)
+    at Promise._settlePromiseFromHandler (http://localhost:8065/__cypress/runner/cypress_runner.js:6994:31)
+    at Promise._settlePromise (http://localhost:8065/__cypress/runner/cypress_runner.js:7051:18)
+    at Promise._settlePromise0 (http://localhost:8065/__cypress/runner/cypress_runner.js:7096:10)
+    at Promise._settlePromises (http://localhost:8065/__cypress/runner/cypress_runner.js:7172:18)
+    at _drainQueueStep (http://localhost:8065/__cypress/runner/cypress_runner.js:3766:12)
+    at _drainQueue (http://localhost:8065/__cypress/runner/cypress_runner.js:3759:9)
+    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3775:5)
+    at Async.drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3645:14)]]></failure>
+    </testcase>
+    <testcase name="Channel sidebar MM-23239 should remove channel from sidebar after deleting it" time="4.086" classname="MM-23239 should remove channel from sidebar after deleting it">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="13.884" tests="3" failures="1">
+  <testsuite name="Root Suite" timestamp="2020-05-04T05:40:39" tests="0" file="cypress/integration/channel_sidebar/hotkeys_spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Channel switching" timestamp="2020-05-04T05:40:40" tests="3" failures="1" time="13.884">
+    <testcase name="Channel switching should switch channels when pressing the alt + arrow hotkeys" time="8.864" classname="should switch channels when pressing the alt + arrow hotkeys">
+    </testcase>
+    <testcase name="Channel switching should switch to unread channels when pressing the alt + shift + arrow hotkeys" time="5.02" classname="should switch to unread channels when pressing the alt + shift + arrow hotkeys">
+    </testcase>
+    <testcase name="Channel switching should open and close channel switcher on ctrl/cmd + k" time="0" classname="should open and close channel switcher on ctrl/cmd + k">
+      <failure message="Timed out retrying: Expected to find element: `.channel-switch__modal`, but never found it." type="AssertionError"><![CDATA[AssertionError: Timed out retrying: Expected to find element: `.channel-switch__modal`, but never found it.
+    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137438:32)
+    at Object.ensureElExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:137456:12)
+    at ensureExistence (http://localhost:8065/__cypress/runner/cypress_runner.js:127861:23)
+    at onFailFn (http://localhost:8065/__cypress/runner/cypress_runner.js:127899:9)
+    at tryCatcher (http://localhost:8065/__cypress/runner/cypress_runner.js:9059:23)
+    at Promise._settlePromiseFromHandler (http://localhost:8065/__cypress/runner/cypress_runner.js:6994:31)
+    at Promise._settlePromise (http://localhost:8065/__cypress/runner/cypress_runner.js:7051:18)
+    at Promise._settlePromise0 (http://localhost:8065/__cypress/runner/cypress_runner.js:7096:10)
+    at Promise._settlePromises (http://localhost:8065/__cypress/runner/cypress_runner.js:7172:18)
+    at _drainQueueStep (http://localhost:8065/__cypress/runner/cypress_runner.js:3766:12)
+    at _drainQueue (http://localhost:8065/__cypress/runner/cypress_runner.js:3759:9)
+    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3775:5)
+    at Async.drainQueues (http://localhost:8065/__cypress/runner/cypress_runner.js:3645:14)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

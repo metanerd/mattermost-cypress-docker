@@ -60,12 +60,12 @@ services:
     ports:
       - "8000:8000"
 
-  webhook:
-    build: webhook
-    networks:
-      - mm-test
-    depends_on: 
-      - start_dependencies
+  # webhook:
+  #   build: webhook
+  #   networks:
+  #     - mm-test
+  #   depends_on: 
+  #     - start_dependencies
 
 networks:
   mm-test:
