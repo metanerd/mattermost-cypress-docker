@@ -1,14 +1,33 @@
 version: 2.1
+orbs:
+  node: circleci/node@1.1.6
 jobs:
-  none:
-    docker:
-      - image: alpine:3.10
+  build-and-test:
+    machine:
+      image: ubuntu-1604:201903-01
+    working_directory: ~/mattermost-cypress-docker
+    environment:
+      COMPOSE_PROJECT_NAME: "circleci"
     steps:
+      - checkout
+      - attach_workspace:
+          at: ~/mattermost-cypress-docker
       - run:
-          command: echo "Skipping. not implemented"
-
+          name: Build Docker compose
+          command: |
+            make build
+          background: true
+      - run:
+          name: Run server
+          command: |
+            make run
+          background: true
+      - run:
+          name: Run cypress test
+          command: |
+            docker run --net mattermost-e2e_mm-test --rm --name mattermost-e2e_cypress -e CYPRESS_baseUrl=http://app:8000 -e CYPRESS_webhookBaseUrl=http://webhook:3000 mattermost-e2e/cypress
+          background: true
 workflows:
-  version: 2
-  mainbuild:
-    jobs:
-      - none
+    build-and-test:
+      jobs:
+        - build-and-test
