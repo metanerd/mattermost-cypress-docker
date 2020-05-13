@@ -88,11 +88,11 @@ jobs:
           command: |
             cd e2e && nohup node webhook_serve.js > webhook_serve.log &
 
-            # export TYPE=DAILY
+            export TYPE=DAILY
             export BRANCH=master
             export BUILD_ID=$CIRCLE_BUILD_NUM
 
-            # export DASHBOARD_ENABLE=true
+            export DASHBOARD_ENABLE=true
 
             export BROWSER=chrome
             export HEADLESS=true
