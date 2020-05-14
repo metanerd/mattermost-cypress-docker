@@ -77,7 +77,8 @@ jobs:
           at: ~/mattermost-cypress-docker
       - run:
           name: Seed data to OpenLDAP
-          command: cd mattermost-e2e && cat test-data/ldap-data.ldif | ldapadd -x -D "cn=admin,dc=mm,dc=test,dc=com" -w mostest;
+          command: |
+            ssh remote-docker \ cd mattermost-e2e && cat test-data/ldap-data.ldif | ldapadd -x -D "cn=admin,dc=mm,dc=test,dc=com" -w mostest;
       - run:
           name: Set and restore Postgres DB
           command: |
