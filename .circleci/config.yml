@@ -78,7 +78,7 @@ jobs:
       - run:
           name: Seed data to OpenLDAP
           command: |
-            ssh remote-docker \ cd mattermost-e2e && cat test-data/ldap-data.ldif | ldapadd -x -D "cn=admin,dc=mm,dc=test,dc=com" -w mostest;
+            ssh remote-docker \ cat mattermost-cypress-docker/mattermost-e2e/test-data/ldap-data.ldif | ldapadd -x -D "cn=admin,dc=mm,dc=test,dc=com" -w mostest;
       - run:
           name: Set and restore Postgres DB
           command: |
