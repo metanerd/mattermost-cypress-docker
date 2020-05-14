@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
 
 workflows:
   build-and-test:
@@ -11,59 +9,14 @@ workflows:
 jobs:
   build-and-test:
     docker:
-      - image: circleci/node:10.20.1-stretch-browsers
-        environment:
-          TEST_DATABASE_URL: postgres://mmuser:mostest@localhost:5432/mattermost_test
-      - image: circleci/postgres:9.6.5-alpine-ram
-        environment:
-          POSTGRES_USER: mmuser
-          POSTGRES_PASSWORD: mostest
-          POSTGRES_DB: mattermost_test
-      - image: jhillyerd/inbucket:release-1.2.0
-      - image: osixia/openldap:1.2.2
-        environment:
-          LDAP_TLS_VERIFY_CLIENT: "never"
-          LDAP_ORGANISATION: "Mattermost Test"
-          LDAP_DOMAIN: "mm.test.com"
-          LDAP_ADMIN_PASSWORD: "mostest"
-      - image: minio/minio:RELEASE.2019-10-11T00-38-09Z
-        command: "server /data"
-        environment:
-          MINIO_ACCESS_KEY: minioaccesskey
-          MINIO_SECRET_KEY: miniosecretkey
-          MINIO_SSE_MASTER_KEY: "my-minio-key:6368616e676520746869732070617373776f726420746f206120736563726574"
-      - image: mattermost/mattermost-elasticsearch-docker:6.5.1
-        environment:
-          http.host: "0.0.0.0"
-          http.port: 9200
-          http.cors.enabled: "true"
-          http.cors.allow-origin: "http://localhost:1358,http://127.0.0.1:1358"
-          http.cors.allow-headers: "X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
-          http.cors.allow-credentials: "true"
-          transport.host: "127.0.0.1"
-          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-      - image: mattermost/mattermost-enterprise-edition:master
-        environment:
-          DB_HOST: localhost
-          DB_PORT_NUMBER: 5432
-          MM_DBNAME: mattermost_test
-          MM_USERNAME: mmuser
-          MM_PASSWORD: mostest
-          CI_INBUCKET_HOST: localhost
-          CI_INBUCKET_PORT: 10080
-          CI_LDAP_HOST: localhost
-          CI_MINIO_HOST: minio
-          IS_CI: true
-          MM_EMAILSETTINGS_SMTPSERVER: localhost
-          MM_EMAILSETTINGS_SMTPPORT: 10025
-          MM_ELASTICSEARCHSETTINGS_CONNECTIONURL: http://localhost:9200
-          MM_SQLSETTINGS_DATASOURCE: "postgres://mmuser:mostest@localhost:5432/mattermost_test?sslmode=disable&connect_timeout=10"
-          MM_SQLSETTINGS_DRIVERNAME: postgres
-    working_directory: ~/mattermost-cypress-docker
-    environment:
-      COMPOSE_PROJECT_NAME: "circleci"
+      - image: circleci/buildpack-deps:stable
+    working_directory: ~/mattermost-e2e
     steps:
+      - checkout
       - setup_remote_docker
+      - run:
+          command: |
+            docker-compose -f docker-compose.server.yml up -d
       - run:
           name: Wait for Inbucket
           command: |
@@ -72,42 +25,3 @@ jobs:
           name: Wait for Elasticsearch
           command: |
             until curl --max-time 5 --output - localhost:9000; do echo waiting for Elasticsearch; sleep 5; done;
-      - checkout
-      - attach_workspace:
-          at: ~/mattermost-cypress-docker
-      - run:
-          name: Set and restore Postgres DB
-          command: |
-            whoami
-            sudo apt-get update
-            sudo apt-get install postgresql-client-9.6
-            psql -d $TEST_DATABASE_URL -c "CREATE DATABASE migrated;"
-            psql -d $TEST_DATABASE_URL -c "CREATE DATABASE latest;"
-            psql -d $TEST_DATABASE_URL mattermost_test < mattermost-e2e/test-data/postgresql_mattermost_test_db.sql
-
-            psql -d $TEST_DATABASE_URL -c "DELETE FROM licenses WHERE id='$EE_LICENSE_ID';"
-            psql -d $TEST_DATABASE_URL -c "INSERT INTO licenses (id, createat, bytes) VALUES ('$EE_LICENSE_ID','1589175893083','$EE_LICENSE');"
-            psql -d $TEST_DATABASE_URL -c "DELETE FROM systems WHERE name='ActiveLicenseId';"
-            psql -d $TEST_DATABASE_URL -c "INSERT INTO systems (name, value) VALUES ('ActiveLicenseId', '$EE_LICENSE_ID');"
-      - run:
-          name: install-npm
-          command: cd e2e && npm install
-      - save_cache: # special step to save the dependency cache
-          key: dependency-cache-{{ checksum "e2e/package-lock.json" }}
-          paths:
-            - ./e2e/node_modules
-      - run: # run tests
-          name: Run Cypress Test
-          command: |
-            cd e2e && nohup node webhook_serve.js > webhook_serve.log &
-
-            # export TYPE=DAILY
-            export BRANCH=master
-            export BUILD_ID=$CIRCLE_BUILD_NUM
-
-            # export DASHBOARD_ENABLE=true
-
-            export BROWSER=chrome
-            export HEADLESS=true
-
-            cd e2e && node run_tests.js --stage='@prod'
